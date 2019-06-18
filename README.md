@@ -1,8 +1,8 @@
 环境
 ----
-* 客户端：Windows
+* 客户端：Windows10
 
-* 数据库：mysql
+* 数据库：mysql Ver 8.0.16 for Win64 on x86_64 (MySQL Community Server - GPL)
 
 数据库导入
 -------
