@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}
+    初始预算
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-2 col-md-offset-0">
+            <a href="{% url 'cre' %}" class="button button-rounded text-right">创 建</a>
+        </div>
+        <div class="col-md-9">
+            <div class="form-group form-inline">
+                <label for="sel_year">年份:</label>
+                <select class="form-control show-tick selectpicker" id="sel_year">
+                    <option value=""></option>
+                    {% for year in years %}
+                        <option value={{ year }}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+                <label for="sel_city">城市:</label>
+                <input class="form-control" id="sel_city" style="width: 150px">
+                <label for="sel_name">比赛名称:</label>
+                <input class="form-control" id="sel_name">
+                <button class="btn btn-default" id="get_sele">查询</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-12 row">
+        <hr/>
+    </div>
+    <div row>
+        <div class="col-md-10 row col-md-offset-0" id="show_elelist">
+            {% for ele in elelist %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href={% url 'selel' ele.pk %}>{{ ele.name }}初始预算表</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>还没有初始预算表哟</p>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        $('#get_sele').click(function () {
+            var year = $('#sel_year').val();
+            if ($.trim($("#sel_city").val()).length == 0) {
+                var site = '';
+            } else {
+                var site = $('#sel_city').val();
+            }
+            if ($.trim($("#sel_name").val()).length == 0) {
+                var name = '';
+            } else {
+                var name = $('#sel_name').val();
+                alert(name);
+            }
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'selel2' %}",
+                traditional: true,
+                dataType: "json",
+                data: {year: year, site: site, name: name},
+                success: function (data) {
+                     $('#show_elelist').empty();
+                     $.each(data, function (i, item) {
+                         $('#show_elelist').append("<div class=\"panel panel-default\">\n" +
+                            "<div class=\"panel-body\">\n" +
+                            "<a href="+item.el_id+" >"+ item.nam+"初始预算表</a>\n" +
+                            "</div>\n" +
+                            "</div>");
+                     });
+                }
+            })
+        })
+    </script>
+{% endblock %}

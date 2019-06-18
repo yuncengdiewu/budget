@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% block title %}
+    用户信息
+{% endblock %}
+{% block content %}
+    <div class="col-md-10 col-md-offset-1">
+    {% if  user.ty %}
+        <div class="list-op" id="list -op">
+            <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#userModal">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true">
+                    注册
+                </span>
+            </button>
+            <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                            </button>
+                            <h4 class="modal-title text-center" id="userModalLabel">
+                                用户注册
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="crename">用户名</label>
+                                <input type="text" id="crename" name="crename" class="form-control"
+                                       placeholder="用户名" maxlength="15">
+                                <ul class="errorlist">
+                                    <li class="error" id="error_name_length" hidden>用户名长度不能少于3个字哦</li>
+                                    <li class="error" id="error_name" hidden>用户名已存在</li>
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <label for="crepass">密码</label>
+                                <input type="password" id="crpass" name="crepass" class="form-control"
+                                       placeholder="密码" maxlength="15">
+                                <ul class="errorlist">
+                                    <li class="error" id="error_password" hidden>密码长度不能少于3个字哦</li>
+                                </ul>
+                            </div>
+                            <div class="form-group form-inline">
+                                <input type="checkbox" name="crety" id="crety" class="form-control"style="width: 15px">
+                                <label for="crety" style="padding-left: 5px">总教练</label>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                关闭
+                            </button>
+                            <button type="button" id="btn_submit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-default btn-sm" id="de_user">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true">
+                    注销
+                </span>
+            </button>
+        </div>
+    {% endif %}
+    <div class="text-right" style="padding-bottom: 15px">
+        <input type="text" id="sele_name">
+        <button type="button" class="btn btn-default btn-sm" id="se_usna">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true">
+                        查询
+                    </span>
+        </button>
+    </div>
+    <table class="table table-bordered text-center" id="usertable">
+        <form action="" method="post">
+            {% csrf_token %}
+            <tr>
+                {% if user.ty %}
+                    <th class="text-center" id="choose"><input type="checkbox" id="select_all"/></th>
+                {% endif %}
+                <th class="text-center">用户名</th>
+                {% if user.ty %}
+                    <th class="text-center">密码</th>
+                {% endif %}
+                <th class="text-center">用户类型</th>
+            </tr>
+            {% for userele in userinfo %}
+                <tr>
+                    {% if user.ty %}
+                        <td class="text-center"><input type="checkbox" name="items" value="{{ userele.pk }}"/></td>
+                    {% endif %}
+                    <td>{{ userele.name }}</td>
+                    {% if user.ty %}
+                        <td>{{ userele.password }}</td>
+                    {% endif %}
+                    <td>
+                        {% if userele.ty %}
+                            总教练
+                        {% else %}
+                            教练
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </form>
+    </table>
+    </div>
+     <script>
+        $(function () {
+            $("#se_usna").click(function () {
+                var nam = $("#sele_name").val();
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'ajax_se_user' %}",
+                    traditional: true,
+                    data: {username: nam},
+                    dataType: "json",
+                    success: function (data) {
+                        $("#usertable tbody").empty();
+                        if (data['usty'])
+                            var ty = '总教练';
+                        else
+                            var ty = '教练';
+                        if (data['user_ty']) {
+                            $("#usertable").append("<tr>"
+                                + "<th class=\"text-center\" id=\"choose\"><input type=\"checkbox\" id=\"select_all\"/></th>"
+                                + "<th class='text-center'>用户名</th>"
+                                + "<th class='text-center'>密码</th>"
+                                + "<th class='text-center'>用户类型</th>"
+                                + "</tr>"
+                                + "<tr>"
+                                + "<td class='text-center'><input type='checkbox' name='items' value='" + data['use_pk'] + "'/></td>"
+                                + "<td class='text-center'>" + data['username'] + "</td>"
+                                + "<td class='text-center'>" + data['usepas'] + "</td>"
+                                + "<td class='text-center'>" + ty + "</td>"
+                                + "</tr>"
+                            )
+                        } else {
+                            $("#usertable").append("<tr>"
+                                + "<th  class='text-center'>用户名</th>"
+                                + "<th  class='text-center'>用户类型</th>"
+                                + "</tr>"
+                                + "<tr>"
+                                + "<td  class='text-center'>" + data['username'] + "</td>"
+                                + "<td  class='text-center'>" + ty + "</td>"
+                                + "</tr>"
+                            )
+                        }
+                    }
+                });
+            })
+        })
+    </script>
+    {% if user.ty %}
+        <script>
+            $(function () {
+                $("#btn_submit").click(function () {
+                    if ($("#crename").val().length < 3) {
+                        $('#error_name_length').show();
+                        return
+                    }
+                    var crename = $("#crename").val();
+                    if ($("#crpass").val().length < 3){
+                        $('#error_password').show();
+                        $('#crpass').val('');
+                        return
+                    }
+                    var pa = $("#crpass").val();
+                    var typ = 'False';
+                    if ($("#crety").prop("checked")) {
+                        typ = 'True';
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'ajax_cre_user' %}",
+                        data: {username: crename, password: pa, ty: typ},
+                        dataType: "json",
+                        success:function (data) {
+                            if (data.if_succes){
+                                window.location.reload()
+                            }
+                            else {
+                                $('#error_name').show()
+                                $('#crename').val('')
+                            }
+                        }
+                    });
+                });
+
+            });
+        </script>
+        <script>
+            $(function () {
+                $("#select_all").click(function () {
+                    if ($("#select_all").prop("checked")) {
+                        $("input[name='items']").each(function () {
+                            $(this).prop("checked", true);
+                        });
+                    } else {
+                        $("input[name='items']").each(function () {
+                            $(this).prop("checked", false);
+                        });
+                    }
+                });
+                $("#de_user").click(function () {
+                    var de_list = [];
+                    $("input[name='items']").each(function () {
+                        if ($(this).prop("checked")) {
+                            de_list.push($(this).prop("value"));
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'ajax_de_user' %}",
+                        traditional: true,
+                        data: {de_idlist: de_list},
+                        dataType: "json",
+                        success:function (data) {
+                            if (!data.de_succes){
+                                alert('不能删除自己或已创建预算和账单的用户!')
+                            }
+                             window.location.reload();
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+                $("#usertable").find('td').each(function () {
+                    if ($(this).index() != '0') {
+                        $(this).click(function () {
+                            var preText = $(this).html();
+                            var tdobj = $(this);
+                            $(this).html("");
+                            var inputobj = $("<input type='text' />")
+                                .css("border-width", "0")
+                                .width(tdobj.width())
+                                .height(tdobj.height())
+                                .css("background-color", "#fff")
+                                .css({border: "0px", fontSize: "14px", font: "宋体"})
+                                .css("text-align", "center")
+                                .val(preText)
+                                .appendTo(tdobj);
+                            inputobj.trigger("focus").trigger("select");
+                            inputobj.click(function () {
+                                return false;
+                            });
+                            inputobj.keyup(function (event) {
+                                var keycode = event.which;
+                                if (keycode == 13) {
+                                    var te = inputobj.val();
+                                    tdobj.html(te);
+                                    var trnum = tdobj.parent().prevAll().length;
+                                    var oldnu = $("#usertable").find("tr").eq(trnum).children("td").eq(1).html();
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "{% url 'ajax_up_user' %}",
+                                        traditional: true,
+                                        data: {tp: tdobj.index(), oldele: oldnu, newele: te},
+                                        dataType: "json",
+                                        success:function (data) {
+                                             window.location.reload()
+                                        }
+                                    });
+
+                                } else if (keycode == 27) {
+                                    tdobj.html(preText);
+                                }
+                            });
+                        });
+                    }
+                });
+        </script>
+    {% endif %}
+
+{% endblock %}

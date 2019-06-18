@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}
+    最终预算
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-3 col-md-offset-0">
+            <span class="button-dropdown" data-buttons="dropdown">
+                <button class="button button-rounded">
+                    创建 <i class="fa fa-caret-down"></i>
+                </button>
+
+                <ul class="button-dropdown-list is-below">
+                    {% for cre_u in creulist %}
+                        <li class="button-dropdown-divider">
+                        <a href="{% url 'cre_ult' cre_u.el_id.pk %}">{{ cre_u.el_id.name }}</a>
+                    </li>
+                    {% empty %}
+                        <div class="errorlist"><li>请先创建初始预算表哦</li></div>
+                    {% endfor %}
+                </ul>
+
+            </span>
+        </div>
+        <div class="col-md-9">
+            <div class="form-group form-inline">
+                <label for="sel_year">年份:</label>
+                <select class="form-control show-tick selectpicker" id="sel_year">
+                    <option value=""></option>
+                    {% for year in years %}
+                        <option value={{ year }}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+                <label for="sel_city">城市:</label>
+                <input class="form-control" id="sel_city" style="width: 150px">
+                <label for="sel_name">比赛名称:</label>
+                <input class="form-control" id="sel_name">
+                <button class="btn btn-default" id="get_sele">查询</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-12 row">
+        <hr/>
+    </div>
+    <div row>
+        <div class="col-md-10 row col-md-offset-0" id="show_elelist">
+            {% for ult in ultlist %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href={% url 'showult' ult.pk %}>{{ ult.name }}最终预算表</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>还没有最终预算表哟</p>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        $('#get_sele').click(function () {
+            var year = $('#sel_year').val();
+            if ($.trim($("#sel_city").val()).length == 0) {
+                var site = '';
+            } else {
+                var site = $('#sel_city').val();
+            }
+            if ($.trim($("#sel_name").val()).length == 0) {
+                var name = '';
+            } else {
+                var name = $('#sel_name').val();
+                alert(name);
+            }
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'ajax_se_account' %}",
+                traditional: true,
+                dataType: "json",
+                data: {year: year, site: site, name: name},
+                success: function (data) {
+                    $('#show_elelist').empty();
+                    $.each(data, function (i, item) {
+                        $('#show_elelist').append("<div class=\"panel panel-default\">\n" +
+                            "<div class=\"panel-body\">\n" +
+                            "<a href='zzys/" + item.el_id + " '>" + item.nam + "最终预算表</a>\n" +
+                            "</div>\n" +
+                            "</div>");
+                    });
+                }
+            })
+        })
+    </script>
+{% endblock %}

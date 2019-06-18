@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="/static/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/ma.css" rel="stylesheet">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="/static/bootstrap-3.3.7/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script src="/static/bootstrap-3.3.7/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+    <link href="/static/bootstrap-3.3.7/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="/static/css/buttons.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <script src="/static/js/buttons.js"></script>
+    <link href="/static/bootstrap-3.3.7/css/bootstrap-select.min.css" rel="stylesheet">
+    <script src="/static/bootstrap-3.3.7/js/bootstrap-select.min.js"></script>
+    <script src="/static/bootstrap-3.3.7/js/defaults-zh_CN.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'creindex' %}">ACM预算系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'eltail' %}">初始预算</a></li>
+                <li><a href="{% url 'ul_list' %}">最终预算</a></li>
+                <li><a href="{% url 'account_list' %}">实际账单</a></li>
+                <li class="dropdown">
+                    <a id="se_qt" data-toggle="dropdown" href="#">其它
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'show_qt' 1 %}">出发车次</a></li>
+                        <li><a href="{% url 'show_qt' 2 %}">回程车次</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'show_qt' 3 %}">出发航班</a></li>
+                        <li><a href="{% url 'show_qt' 4 %}">回程航班</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'show_qt' 5 %}">酒店</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar">
+            <div class="text-center">
+                <ul class="nav nav-sidebar">
+                    <li>
+                        <img src="../../static/images/touxiang.jpg" class="img-circle"
+                             style="width: 110px;height: 110px">
+                        <h3 style="color: #981a77">欢迎您！</h3>
+                        <div class="list-op" id="list-op">
+                            <button class="button button-tiny button-pill button-inverse" id="up_uu">修改
+                            </button>
+                            <a href="{% url 'unlogin' %}" class="button button-pill button-tiny button-inverse">登出</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="col-md-10 col-md-offset-1" id="up_user" style="padding-top: 10px" hidden>
+                            <div class="row">
+                                <input class="form-control" style="width: 150px;" placeholder="密码"
+                                       id="uspassword" maxlength="15">
+                                <ul class="errorlist">
+                                    <li id="pa_error" hidden>密码长度不能小于3个字</li>
+                                </ul>
+                            </div>
+                            <div class="row" style="padding-top: 5px">
+                                <button class="form-control" style="width: 150px;" id="get_up">提交</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a class="text-nowrap" href="{% url 'userinfo' %}">用户信息</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#up_uu').click(function () {
+        $('#up_user').show();
+    });
+    $('#get_up').click(function () {
+        if ($("#uspassword").val().length < 3){
+            $('#pa_error').show();
+            $('#uspassword').val('');
+            return
+        }
+        var pa = $("#uspassword").val();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'ajax_up_own' %}",
+            data: {password: pa},
+            dataType: "json",
+            success:function (data) {
+                if (data.up_succes){
+                    alert('密码修改成功');
+                    window.location.reload()
+                }
+            }
+        });
+    })
+</script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

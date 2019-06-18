@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}
+    初始预算创建
+{% endblock %}
+{% block content %}
+    <hr>
+    <div class="col-md-offset-2">
+        {% if creerroe %}
+            <ul class="errorlist">
+                <li class="error text-center">这个初始预算已经被创建了哟</li>
+            </ul>
+            <hr>
+        {% endif %}
+        <script>
+            function getCityOptions(province_id) {
+                $.ajax({
+                    type: 'GET',
+                    url: "getcitylist_provinceID" + province_id,
+                    dataType: 'json',
+                    success: function (data) {
+                        for (var i = 1; i < 392; i++)
+                            $("#id_city option[value=" + i + "]").show();
+                        $("#id_city").val(data['star']);
+                        for (var i = 1; i < data['star']; i++)
+                            $("#id_city option[value=" + i + "]").hide();
+                        for (var i = data['end']; i < 392; i++)
+                            $("#id_city option[value=" + i + "]").hide();
+                    }
+                })
+            }
+        </script>
+        <form enctype="multipart/form-data" method="post">
+
+            <div class="row">
+                <div class="col-md-2">
+                    {{ elebform.nty.errors }}
+                    {{ elebform.nty.label_tag }}
+                    {{ elebform.nty }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    {{ elebform.province.errors }}
+                    {{ elebform.province.label_tag }}
+                    {{ elebform.province }}
+                </div>
+                <div class="col-md-3 col-md-offset-0">
+                    {{ elebform.city.label_tag }}
+                    {{ elebform.city }}
+                    {{ elebform.city.errors }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    {{ elebform.teachernum.errors }}
+                    {{ elebform.teachernum.label_tag }}
+                    {{ elebform.teachernum }}
+                </div>
+                <div class="col-md-3 col-md-offset-0">
+                    {{ elebform.teamnum.errors }}
+                    {{ elebform.teamnum.label_tag }}
+                    {{ elebform.teamnum }}
+                </div>
+                <div class="col-md-3 col-md-offset-0">
+                    {{ elebform.girlnum.errors }}
+                    {{ elebform.girlnum.label_tag }}
+                    {{ elebform.girlnum }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    {{ elebform.starttime.errors }}
+                    {{ elebform.starttime.label_tag }}
+                    {{ elebform.starttime }}
+                </div>
+                <div class="col-md-3 col-md-offset-0">
+                    {{ elebform.endtime.errors }}
+                    {{ elebform.endtime.label_tag }}
+                    {{ elebform.endtime }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    {{ elebform.allo.errors }}
+                    {{ elebform.allo.label_tag }}
+                    {{ elebform.allo }}
+                </div>
+                <div class="col-md-3 col-md-offset-0">
+                    {{ elebform.apply.errors }}
+                    {{ elebform.apply.label_tag }}
+                    {{ elebform.apply }}
+                </div>
+            </div>
+            <div class="row">
+                <hr>
+                <div class="col-md-2 col-md-offset-6">
+
+                    <input type="submit" value="确定" class="form-control"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+            var today = new Date();
+            var format_td = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            $('#id_starttime').datetimepicker({
+                minView: 0,
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii',
+                //todayBtn:  1,//今日按钮
+                startDate: format_td,
+                autoclose: 1,//选中关闭
+                //todayHighlight : 1,
+                //forceParse : 1,
+            }).on('changeDate', function (ev) {
+                var starttime = $('#id_starttime').val();
+                $('#id_endtime').datetimepicker('setStartDate', starttime);
+                $('#id_endtime').datetimepicker('hide')
+            });
+            $('#id_endtime').datetimepicker({
+                minView: 0,
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii',
+                autoclose: 1,//选中关闭
+                //todayHighlight : 1,
+                //forceParse : 1,
+            })
+        </script>
+{% endblock %}

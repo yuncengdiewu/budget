@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% block title %}
+    初始预算信息表
+{% endblock %}
+{% block content %}
+    <div class="col-md-11">
+        <div class="row text-right">
+            <a href="{% url 'cre' %}" class="button button-rounded button-small">创 建</a>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <hr/>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-md-10 col-md-offset-1">
+            <table class="table table-bordered">
+                <tr>
+                    <th colspan="1" class="text-center">比赛名</th>
+                    <th colspan="11" class="text-center" id="name">{{ ele.name }}</th>
+                </tr>
+                <tr>
+                    <td>老师数量</td>
+                    <td colspan="2"><select class="form-control" id="teachernums">
+                        {% for tenum in nums.tenums %}
+                            {% if tenum == ele.teachernum %}
+                                <option value={{ tenum }} selected>{{ tenum }}</option>
+                            {% else %}
+                                <option value= {{ tenum }}>{{ tenum }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td>学生数量</td>
+                    <td colspan="1">{{ ele.studentnum }}</td>
+                    <td>队伍数量</td>
+                    <td colspan="2"><select class="form-control" id="teamnums">
+                        {% for teanu in nums.teannum %}
+                            {% if teanu == ele.teamnum %}
+                                <option value={{ teanu }} selected>{{ teanu }}</option>
+                            {% else %}
+                                <option value= {{ teanu }}>{{ teanu }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td>女性数量</td>
+                    <td colspan="2"><select class="form-control" id="felnums">
+                        {% for felnu in nums.felnum %}
+                            {% if felnu == ele.feanum %}
+                                <option value={{ felnu }} selected>{{ felnu }}</option>
+                            {% else %}
+                                <option value= {{ felnu }}>{{ felnu }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                </tr>
+                <tr>
+                    <td colspan="1">初始出发时间</td>
+                    <td colspan="4"><input class="form-control" id="starttime" value="{{ times.stime | date:"Y-m-d H:i"}}"></td>
+                    <td colspan="1">初始回程时间</td>
+                    <td colspan="6"><input class="form-control" id="endtime" value="{{ times.etime | date:"Y-m-d H:i"}}"></td>
+                </tr>
+                <tr>
+                    <td>老师外出天数</td>
+                    <td colspan="2">{{ ele.teacherdays }}</td>
+                    <td>老师停留天数</td>
+                    <td colspan="1">{{ ele.teajoldays }}</td>
+                    <td>学生外出天数</td>
+                    <td colspan="2">{{ ele.studentdays }}</td>
+                    <td>学生停留天数</td>
+                    <td colspan="2">{{ ele.stuholdays }}</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">队伍</td>
+                    <td colspan="2">出发车次</td>
+                    <td colspan="2">出发时间</td>
+                    <td colspan="2">到达时间</td>
+                    <td colspan="3">车票单价</td>
+                    <td colspan="2">总计费用</td>
+                </tr>
+                <tr>
+                    <td colspan="2">{{ ele.stus_tra.T_id }}</td>
+                    <td colspan="2">{{ ele.stus_tra.stime }}</td>
+                    <td colspan="2">{{ ele.stus_tra.etime }}</td>
+                    <td colspan="3">{{ ele.stus_tra.price }}</td>
+                    <td colspan="2">{{ ele.stus_pri }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">回程车次</td>
+                    <td colspan="2">回程时间</td>
+                    <td colspan="2">结束时间</td>
+                    <td colspan="3">车票单价</td>
+                    <td colspan="2">总计费用</td>
+                </tr>
+                <tr>
+                    <td colspan="2">{{ ele.stue_tra.T_id }}</td>
+                    <td colspan="2">{{ ele.stue_tra.stime }}</td>
+                    <td colspan="2">{{ ele.stue_tra.etime }}</td>
+                    <td colspan="3">{{ ele.stue_tra.price }}</td>
+                    <td colspan="2">{{ ele.stue_pri }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">报名费</td>
+                    <td colspan="2">酒店名称</td>
+                    <td colspan="2">房间数量</td>
+                    <td colspan="3">酒店价格</td>
+                    <td colspan="2">住宿总费用</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input class="form-control" id="apply_price"
+                                           value={{ ele.apply }} style='width:110px'></td>
+                    <td colspan="2">{{ ele.acc.name }}</td>
+                    <td colspan="2">{{ ele.stu_acc }}</td>
+                    <td colspan="3">{{ ele.acc.price }}</td>
+                    <td colspan="2">{{ ele.stu_accpr }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">总预算</td>
+                    <td colspan="9">{{ ele.stus_pri }} + {{ ele.stue_pri }} + {{ ele.stu_accpr }} +
+                        {{ ele.apply }} * {{ ele.teamnum }} = {{ ele.stu_pri }}</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">老师</td>
+                    <td colspan="2">
+                        {% if ele.ty %}
+                            出发航班
+                        {% else %}
+                            出发车次
+                        {% endif %}
+                    <td colspan="2">出发时间</td>
+                    <td colspan="2">到达时间</td>
+                    {% if ele.ty %}
+                        <td colspan="3">机票单价</td>
+                    {% else %}
+                        <td colspan="3">车票单价</td>
+                    {% endif %}
+                    <td colspan="2">总计费用</td>
+                </tr>
+                <tr>
+                    {% if ele.ty %}
+                        <td colspan="2">{{ ele.teas_air.A_id }}</td>
+                        <td colspan="2">{{ ele.teas_air.stime }}</td>
+                        <td colspan="2">{{ ele.teas_air.etime }}</td>
+                        <td colspan="3">{{ ele.teas_air.price }}</td>
+                    {% else %}
+                        <td colspan="2">{{ ele.teas_tra.T_id }}</td>
+                        <td colspan="2">{{ ele.teas_tra.stime }}</td>
+                        <td colspan="2">{{ ele.teas_tra.etime }}</td>
+                        <td colspan="3">{{ ele.teas_tra.price }}</td>
+                    {% endif %}
+                    <td colspan="2">{{ ele.teacs_pri }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {% if ele.ty %}
+                            回程航班
+                        {% else %}
+                            回程航班
+                        {% endif %}
+                    <td colspan="2">回程时间</td>
+                    <td colspan="2">结束时间</td>
+                    {% if ele.ty %}
+                        <td colspan="3">机票单价</td>
+                    {% else %}
+                        <td colspan="3">车票单价</td>
+                    {% endif %}
+                    <td colspan="2">总计费用</td>
+                </tr>
+                <tr>
+                    {% if ele.ty %}
+                        <td colspan="2">{{ ele.teae_air.A_id }}</td>
+                        <td colspan="2">{{ ele.teae_air.stime }}</td>
+                        <td colspan="2">{{ ele.teae_air.etime }}</td>
+                        <td colspan="3">{{ ele.teae_air.price }}</td>
+                    {% else %}
+                        <td colspan="2">{{ ele.teae_tra.T_id }}</td>
+                        <td colspan="2">{{ ele.teae_tra.stime }}</td>
+                        <td colspan="2">{{ ele.teae_tra.etime }}</td>
+                        <td colspan="3">{{ ele.teae_tra.price }}</td>
+                    {% endif %}
+                    <td colspan="2">{{ ele.teace_pri }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">补贴费</td>
+                    <td colspan="2">酒店名称</td>
+                    <td colspan="2">房间数量</td>
+                    <td colspan="3">酒店价格</td>
+                    <td colspan="2">住宿总费用</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input class="form-control" value={{ ele.allo }} style='width:110px'
+                                           id="allo_price"></td>
+                    <td colspan="2">{{ ele.acc.name }}</td>
+                    <td colspan="2">{{ ele.tea_acc }}</td>
+                    <td colspan="3">{{ ele.acc.price }}</td>
+                    <td colspan="2">{{ ele.tea_accpr }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">总预算</td>
+                    <td colspan="9">{{ ele.teacs_pri }} + {{ ele.teace_pri }} + {{ ele.tea_accpr }} +
+                        {{ ele.allo }} * {{ ele.teajoldays }} * {{ ele.teachernum }} = {{ ele.tea_pri }}</td>
+                </tr>
+                <tr>
+                    <td>初始总预算</td>
+                    <td colspan="11">{{ ele.stu_pri }} + {{ ele.tea_pri }} = {{ ele.price }}</td>
+                </tr>
+                <tr>
+                    <td>创建人</td>
+                    <td colspan="11" class="text-left">{{ ele.user }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-10">
+            <button class="btn btn-default text-left" id='dele'>删除</button>
+            <button class="btn btn-default text-left" id="get_date">提交</button>
+        </div>
+    </div>
+    <script>
+        var today = new Date();
+        var format_td = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        $('#starttime').datetimepicker({
+            minView: 0,
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd hh:ii',
+            startDate: format_td,
+            endDate:$('#endtime').val(),
+            autoclose: 1,//选中关闭
+        }).on('changeDate', function (ev) {
+            var starttime = $('#starttime').val();
+            $('#endtime').datetimepicker('setStartDate', starttime);
+            $('#endtime').datetimepicker('hide')
+        });
+        var st = $('#starttime').val();
+        $('#endtime').datetimepicker({
+            minView: 0,
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd hh:ii',
+            startDate:st,
+            autoclose: 1,//选中关闭
+            //todayHighlight : 1,
+            //forceParse : 1,
+        })
+    </script>
+    <script>
+        $('#get_date').click(function () {
+            var name = $('#name').text();
+            var teachernums = $('#teachernums').val();
+            var teamnums = $('#teamnums').val();
+            var felnums = $('#felnums').val();
+            var allo = $('#allo_price').val();
+            var apply = $('#apply_price').val();
+            var starttime = $('#starttime').val();
+            var endtime = $('#endtime').val();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'ajax_up_ele' %}",
+                data: {
+                    name: name, teachernums: teachernums, teamnums: teamnums, felnums: felnums, allo: allo,
+                    apply: apply, starttime: starttime, endtime: endtime
+                },
+                success: function (date) {
+                    window.location.reload();
+                }
+            })
+
+
+        })
+    </script>
+    <script>
+        $('#dele').click(function () {
+            var name = $('#name').text();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'ajax_de_ele' %}",
+                data: {name: name},
+                success: function (date) {
+                    window.location.replace("{% url 'eltail' %}");
+                }
+            })
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ naty }}
+{% endblock %}
+{% block content %}
+    <div class="col-md-10 col-md-offset-1">
+        <div class="list-op" id="list -op">
+            <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#qtModal">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true">
+                    添加
+                </span>
+            </button>
+            <div class="modal fade" id="qtModal" tabindex="-1" role="dialog" aria-labelledby="qtModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                            </button>
+                            <h4 class="modal-title text-center" id="qtModalLabel">
+                                添加{{ naty }}
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                {% if type == 1 %}
+                                    <label for="cre_tra_id">出发车次</label>
+                                    <input class="form-control" id="cre_tra_id">
+                                    <label for="cre_stime">出发时间</label>
+                                    <input class="form-control" id="cre_stime">
+                                    <label for="cre_etime">到达时间</label>
+                                    <input class="form-control" id="cre_etime">
+                                    <label for="cre_site">目的地</label>
+                                    <input class="form-control" id="cre_site">
+                                    <label for="cre_price">价格</label>
+                                    <input class="form-control" id="cre_price">
+                                {% elif type == 2 %}
+                                    <label for="cre_tra_id">回程车次</label>
+                                    <input class="form-control" id="cre_tra_id">
+                                    <label for="cre_stime">出发时间</label>
+                                    <input class="form-control" id="cre_stime">
+                                    <label for="cre_etime">到达时间</label>
+                                    <input class="form-control" id="cre_etime">
+                                    <label for="cre_site">目的地</label>
+                                    <input class="form-control" id="cre_site">
+                                    <label for="cre_price">价格</label>
+                                    <input class="form-control" id="cre_price">
+                                {% elif type == 3 %}
+                                    <label for="cre_tra_id">出发航班</label>
+                                    <input class="form-control" id="cre_tra_id">
+                                    <label for="cre_stime">出发时间</label>
+                                    <input class="form-control" id="cre_stime">
+                                    <label for="cre_etime">到达时间</label>
+                                    <input class="form-control" id="cre_etime">
+                                    <label for="cre_site">目的地</label>
+                                    <input class="form-control" id="cre_site">
+                                    <label for="cre_price">价格</label>
+                                    <input class="form-control" id="cre_price">
+                                {% elif type == 4 %}
+                                    <label for="cre_tra_id">回程航班</label>
+                                    <input class="form-control" id="cre_tra_id">
+                                    <label for="cre_stime">出发时间</label>
+                                    <input class="form-control" id="cre_stime">
+                                    <label for="cre_etime">到达时间</label>
+                                    <input class="form-control" id="cre_etime">
+                                    <label for="cre_site">目的地</label>
+                                    <input class="form-control" id="cre_site">
+                                    <label for="cre_price">价格</label>
+                                    <input class="form-control" id="cre_price">
+                                {% else %}
+                                    <label for="cre_tra_id">酒店名称</label>
+                                    <input class="form-control" id="cre_tra_id">
+                                    <label for="cre_site">地点</label>
+                                    <input class="form-control" id="cre_site">
+                                    <label for="cre_price">价格</label>
+                                    <input class="form-control" id="cre_price">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                关闭
+                            </button>
+                            <button type="button" id="btn_submit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-default btn-sm" id="de_qt">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true">
+                    删除
+                </span>
+            </button>
+        </div>
+        <div class="text-right form-inline" style="padding-bottom: 15px">
+            {% if type == 1 %}
+                <input class="form-control" type="text" id="se_time_qt" placeholder="出发时间" style="width: 20%">
+                <input class="form-control" type="text" id="se_id_qt" placeholder="车次" style="width: 20%">
+            {% elif type == 2 %}
+                <input class="form-control" type="text" id="se_time_qt" placeholder="到达时间" style="width: 20%">
+                <input class="form-control" type="text" id="se_id_qt" placeholder="车次" style="width: 20%">
+            {% elif type == 3 %}
+                <input class="form-control" type="text" id="se_time_qt" placeholder="出发时间" style="width: 20%">
+                <input class="form-control" type="text" id="se_id_qt" placeholder="航班号" style="width: 20%">
+            {% elif type == 4 %}
+                <input class="form-control" type="text" id="se_time_qt" placeholder="到达时间" style="width: 20%">
+                <input class="form-control" type="text" id="se_id_qt" placeholder="航班号" style="width: 20%">
+            {% else %}
+                <input class="form-control" type="text" id="se_id_qt" placeholder="酒店名称" style="width: 20%">
+            {% endif %}
+            <input class="form-control" type="text" id="se_site_qt" placeholder="地点" style="width: 20%">
+            <button type="button" class="btn btn-default btn-sm" id="sel_qt">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true">
+                        查询
+                    </span>
+            </button>
+        </div>
+        <table class="table table-bordered text-center" id="qttable">
+            <tr>
+                <th class="text-center" id="choose"><input type="checkbox" id="select_all"/></th>
+                {% if type == 1 %}
+                    <th class="text-center">出发车次</th>
+                    <th class="text-center">目的地</th>
+                    <th class="text-center">出发时间</th>
+                    <th class="text-center">到达时间</th>
+                    <th class="text-center">价格</th>
+                {% elif type == 2 %}
+                    <th class="text-center">回程车次</th>
+                    <th class="text-center">目的地</th>
+                    <th class="text-center">出发时间</th>
+                    <th class="text-center">到达时间</th>
+                    <th class="text-center">价格</th>
+                {% elif type == 3 %}
+                    <th class="text-center">出发航班</th>
+                    <th class="text-center">目的地</th>
+                    <th class="text-center">出发时间</th>
+                    <th class="text-center">到达时间</th>
+                    <th class="text-center">价格</th>
+                {% elif type == 4 %}
+                    <th class="text-center">回程航班</th>
+                    <th class="text-center">目的地</th>
+                    <th class="text-center">出发时间</th>
+                    <th class="text-center">到达时间</th>
+                    <th class="text-center">价格</th>
+                {% else %}
+                    <th class="text-center">酒店名称</th>
+                    <th class="text-center">地点</th>
+                    <th class="text-center">价格</th>
+                {% endif %}
+            </tr>
+            {% for ele in elelist %}
+                <tr>
+                <td class="text-center"><input type="checkbox" name="items" value="{{ ele.pk }}"/></td>
+                {% if type == 5 %}
+                    <td>{{ ele.name }}</td>
+                    <td>{{ ele.site }}</td>
+                    <td>{{ ele.price }}</td>
+                {% else %}
+                    {% if type == 1 %}
+                        <td>{{ ele.T_id }}</td>
+                    {% elif type == 2 %}
+                        <td>{{ ele.T_id }}</td>
+                    {% else %}
+                        <td>{{ ele.A_id }}</td>
+                    {% endif %}
+                    <td>{{ ele.site }}</td>
+                    <td>{{ ele.stime }}</td>
+                    <td>{{ ele.etime }}</td>
+                    <td>{{ ele.price }}</td>
+                {% endif %}
+            {% endfor %}
+
+        </table>
+    </div>
+    <script>
+        $(function () {
+            $("#sel_qt").click(function () {
+                var time = '';
+                if ($('#se_time_qt').find()) {
+                    if ($.trim($("#se_time_qt").val()).length != 0) {
+                        time = $('#se_time_qt').val();
+                    }
+                }
+                if ($.trim($("#se_id_qt").val()).length == 0) {
+                    var tra_id = '';
+                } else {
+                    var tra_id = $('#se_id_qt').val();
+                }
+                if ($.trim($("#se_site_qt").val()).length == 0) {
+                    var site = '';
+                } else {
+                    var site = $('#se_site_qt').val();
+                }
+                var ttype = {{ type }};
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'ajax_se_qt' %}",
+                    traditional: true,
+                    data: {time: time, tra_id: tra_id, site: site, type: ttype},
+                    dataType: "json",
+                    success: function (data) {
+                        $("#qttable tbody").empty();
+                        if (ttype == '1') {
+                            $('#qttable').append("<tr>\n" +
+                                "<th class=\"text-center\" id=\"choose\"><input type=\"checkbox\" id=\"select_all\"/></th>" +
+                                "<th class=\"text-center\">出发车次</th>\n" +
+                                "<th class=\"text-center\">目的地</th>\n" +
+                                "<th class=\"text-center\">出发时间</th>\n" +
+                                "<th class=\"text-center\">到达时间</th>\n" +
+                                "<th class=\"text-center\">价格</th></tr>");
+                            $.each(data, function (i, item) {
+                                $('#qttable').append("<tr>\n" +
+                                    "<td class='text-center'>" +
+                                    "<input type='checkbox' name='items' value='"+item.pk+"'/>" +
+                                    "</td>" +
+                                    "<td>"+ item.T_id+"</td>" +
+                                    "<td>"+item.site+"</td>\n" +
+                                    "<td>"+item.stime+"</td>\n" +
+                                    "<td>"+item.etime +"</td>\n" +
+                                    "<td>"+item.price +"</td></tr>");
+                            });
+                        }
+                        else if (ttype == '2') {
+                            $('#qttable').append("<tr>\n" +
+                                "<th class=\"text-center\" id=\"choose\"><input type=\"checkbox\" id=\"select_all\"/></th>" +
+                                "<th class=\"text-center\">回程车次</th>\n" +
+                                "<th class=\"text-center\">目的地</th>\n" +
+                                "<th class=\"text-center\">出发时间</th>\n" +
+                                "<th class=\"text-center\">到达时间</th>\n" +
+                                "<th class=\"text-center\">价格</th></tr>");
+                            $.each(data, function (i, item) {
+                                $('#qttable').append("<tr>\n" +
+                                    "<td class='text-center'>" +
+                                    "<input type='checkbox' name='items' value='"+item.pk+"'/>" +
+                                    "</td>" +
+                                    "<td>"+ item.T_id+"</td>" +
+                                    "<td>"+item.site+"</td>\n" +
+                                    "<td>"+item.stime+"</td>\n" +
+                                    "<td>"+item.etime +"</td>\n" +
+                                    "<td>"+item.price +"</td></tr>");
+                            });
+                        }
+                        else if (ttype == '3') {
+                            $('#qttable').append("<tr>\n" +
+                                "<th class=\"text-center\" id=\"choose\"><input type=\"checkbox\" id=\"select_all\"/></th>" +
+                                "<th class=\"text-center\">出发航班</th>\n" +
+                                "<th class=\"text-center\">目的地</th>\n" +
+                                "<th class=\"text-center\">出发时间</th>\n" +
+                                "<th class=\"text-center\">到达时间</th>\n" +
+                                "<th class=\"text-center\">价格</th></tr>");
+                            $.each(data, function (i, item) {
+                                $('#qttable').append("<tr>\n" +
+                                    "<td class='text-center'>" +
+                                    "<input type='checkbox' name='items' value='"+item.pk+"'/>" +
+                                    "</td>" +
+                                    "<td>"+ item.A_id+"</td>" +
+                                    "<td>"+item.site+"</td>\n" +
+                                    "<td>"+item.stime+"</td>\n" +
+                                    "<td>"+item.etime +"</td>\n" +
+                                    "<td>"+item.price +"</td></tr>");
+                            });
+                        }
+                        else if (ttype == '4') {
+                            $('#qttable').append("<tr>\n" +
+                                "<th class=\"text-center\" id=\"choose\"><input type=\"checkbox\" id=\"select_all\"/></th>" +
+                                "<th class=\"text-center\">回程航班</th>\n" +
+                                "<th class=\"text-center\">目的地</th>\n" +
+                                "<th class=\"text-center\">出发时间</th>\n" +
+                                "<th class=\"text-center\">到达时间</th>\n" +
+                                "<th class=\"text-center\">价格</th></tr>");
+                            $.each(data, function (i, item) {
+                                $('#qttable').append("<tr>\n" +
+                                    "<td class='text-center'>" +
+                                    "<input type='checkbox' name='items' value='"+item.pk+"'/>" +
+                                    "</td>" +
+                                    "<td>"+ item.A_id+"</td>" +
+                                    "<td>"+item.site+"</td>\n" +
+                                    "<td>"+item.stime+"</td>\n" +
+                                    "<td>"+item.etime +"</td>\n" +
+                                    "<td>"+item.price +"</td></tr>");
+                            });
+                        }
+                        else {
+                            $('#qttable').append("<tr>\n" +
+                                "<th class=\"text-center\" id=\"choose\"><input type=\"checkbox\" id=\"select_all\"/></th>" +
+                                "<th class=\"text-center\">酒店名称</th>\n" +
+                                "<th class=\"text-center\">目的地</th>\n" +
+                                "<th class=\"text-center\">价格</th></tr>");
+                            $.each(data, function (i, item) {
+                                $('#qttable').append("<tr>\n" +
+                                    "<td class='text-center'>" +
+                                    "<input type='checkbox' name='items' value='"+item.pk+"'/>" +
+                                    "</td>" +
+                                    "<td>"+ item.name+"</td>" +
+                                    "<td>"+item.site+"</td>\n" +
+                                    "<td>"+item.price +"</td></tr>");
+                            });
+                        }
+                    }
+                });
+            })
+        })
+    </script>
+    <script>
+        $(function () {
+            $("#btn_submit").click(function () {
+                var cre_tra_id = $("#cre_tra_id").val();
+                var cre_site = $('#cre_site').val();
+                var cre_price = $('#cre_price').val();
+                var cre_stime = '';
+                var cre_etime = '';
+                if ($('#cre_stime').find()) {
+                    cre_stime = $('#cre_stime').val();
+                    cre_etime = $('#cre_etime').val();
+                }
+                alert(cre_etime);
+                var ttype = {{ type }};
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'ajax_cre_qt' %}",
+                    data: {
+                        cre_tra_id: cre_tra_id, cre_site: cre_site, cre_price: cre_price, cre_stime: cre_stime,
+                        cre_etime: cre_etime, type: ttype
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        window.location.reload()
+                    }
+                });
+            });
+
+        });
+    </script>
+    <script>
+        $(function () {
+            $("#select_all").click(function () {
+                if ($("#select_all").prop("checked")) {
+                    $("input[name='items']").each(function () {
+                        $(this).prop("checked", true);
+                    });
+                } else {
+                    $("input[name='items']").each(function () {
+                        $(this).prop("checked", false);
+                    });
+                }
+            });
+            $("#de_qt").click(function () {
+                var de_list = [];
+                $("input[name='items']").each(function () {
+                    if ($(this).prop("checked")) {
+                        de_list.push($(this).prop("value"));
+                    }
+                })
+                var ttype = {{ type }};
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'ajax_de_qt' %}",
+                    traditional: true,
+                    data: {de_idlist: de_list, type: ttype},
+                    dataType: "json",
+                    success: function (data) {
+                        if (!data.de_succes) {
+                            alert('不能删除已被引用的信息!')
+                        }
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        var today = new Date();
+        var format_td = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        $('#cre_stime').datetimepicker({
+            minView: 0,
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd hh:ii',
+            //todayBtn:  1,//今日按钮
+            startDate: format_td,
+            autoclose: 1,//选中关闭
+            //todayHighlight : 1,
+            //forceParse : 1,
+        }).on('changeDate', function (ev) {
+            var starttime = $('#cre_stime').val();
+            $('#cre_etime').datetimepicker('setStartDate', starttime);
+        });
+        $('#cre_etime').datetimepicker({
+            minView: 0,
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd hh:ii',
+            autoclose: 1,//选中关闭
+            //todayHighlight : 1,
+            //forceParse : 1,
+        })
+        $('#se_time_qt').datetimepicker({
+            minView: 2,
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd',
+            autoclose: 1,//选中关闭
+        })
+    </script>
+{% endblock %}

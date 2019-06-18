@@ -1,0 +1,445 @@
+{% extends 'base.html' %}
+{% block title %}
+    实际账单创建
+{% endblock %}
+{% block content %}
+    <div class="row text-center">
+        <div class="col-md-10 col-md-offset-1">
+            <table class="table table-bordered">
+                <tr>
+                    <th colspan="1" class="text-center">比赛名</th>
+                    <th colspan="11" class="text-center" id="name">{{ ele.name }}</th>
+                </tr>
+                <tr>
+                    <td>老师数量</td>
+                    <td colspan="2"><select class="form-control" id="teachernums">
+                        {% for tenum in nums.tenums %}
+                            {% if tenum == ele.teachernum %}
+                                <option value={{ tenum }} selected>{{ tenum }}</option>
+                            {% else %}
+                                <option value= {{ tenum }}>{{ tenum }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td>学生数量</td>
+                    <td colspan="1">{{ ele.studentnum }}</td>
+                    <td>队伍数量</td>
+                    <td colspan="2"><select class="form-control" id="teamnums">
+                        {% for teanu in nums.teannum %}
+                            {% if teanu == ele.teamnum %}
+                                <option value={{ teanu }} selected>{{ teanu }}</option>
+                            {% else %}
+                                <option value= {{ teanu }}>{{ teanu }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td>女性数量</td>
+                    <td colspan="2"><select class="form-control" id="felnums">
+                        {% for felnu in nums.felnum %}
+                            {% if felnu == ele.feanum %}
+                                <option value={{ felnu }} selected>{{ felnu }}</option>
+                            {% else %}
+                                <option value= {{ felnu }}>{{ felnu }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>老师外出天数</td>
+                    <td colspan="2">{{ ele.teacherdays }}</td>
+                    <td>老师停留天数</td>
+                    <td colspan="1">{{ ele.teajoldays }}</td>
+                    <td>学生外出天数</td>
+                    <td colspan="2">{{ ele.studentdays }}</td>
+                    <td>学生停留天数</td>
+                    <td colspan="2">{{ ele.stuholdays }}</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">队伍</td>
+                    <td colspan="2">出发车次</td>
+                    <td colspan="2">出发时间</td>
+                    <td colspan="2">到达时间</td>
+                    <td colspan="3">车票单价</td>
+                    <td colspan="2">总计费用</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><select class="form-control" id='st_train'>
+                        {% for traffic in traffics.strtrain %}
+                            {% if traffic.pk == ele.stus_tra.pk %}
+                                <option value={{ traffic.pk }} selected>{{ traffic.T_id }}</option>
+                            {% else %}
+                                <option value= {{ traffic.pk }}>{{ traffic.T_id }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    </td>
+                    <td colspan="2">{{ ele.stus_tra.stime }}</td>
+                    <td colspan="2">{{ ele.stus_tra.etime }}</td>
+                    <td colspan="3">{{ ele.stus_tra.price }}</td>
+                    <td colspan="2">{{ ele.stus_pri }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">回程车次</td>
+                    <td colspan="2">回程时间</td>
+                    <td colspan="2">结束时间</td>
+                    <td colspan="3">车票单价</td>
+                    <td colspan="2">总计费用</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><select class="form-control" id="end_train">
+                        {% for traffic in traffics.endtrain %}
+                            {% if traffic.T_id == ele.stue_tra.T_id %}
+                                <option value={{ traffic.pk }} selected>{{ traffic.T_id }}</option>
+                            {% else %}
+                                <option value= {{ traffic.pk }}>{{ traffic.T_id }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td colspan="2">{{ ele.stue_tra.stime }}</td>
+                    <td colspan="2">{{ ele.stue_tra.etime }}</td>
+                    <td colspan="3">{{ ele.stue_tra.price }}</td>
+                    <td colspan="2">{{ ele.stue_pri }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">报名费</td>
+                    <td colspan="2">酒店名称</td>
+                    <td colspan="2">房间数量</td>
+                    <td colspan="3">酒店价格</td>
+                    <td colspan="2">住宿总费用</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input class="form-control" id="apply_price"
+                                           value={{ ele.apply }} style='width:110px'></td>
+                    <td colspan="2"><select class="form-control" style='width:180px' id="hotel">
+                        {% for shop in grogshop %}
+                            {% if shop.name == ele.acc.name %}
+                                <option value={{ shop.pk }} selected>{{ shop.name }}</option>
+                            {% else %}
+                                <option value= {{ shop.pk }}>{{ shop.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td colspan="2">{{ ele.stu_acc }}</td>
+                    <td colspan="3">{{ ele.acc.price }}</td>
+                    <td colspan="2">{{ ele.stu_accpr }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">总预算</td>
+                    <td colspan="9">{{ ele.stus_pri }} + {{ ele.stue_pri }} + {{ ele.stu_accpr }} +
+                        {{ ele.apply }} * {{ ele.teamnum }} = {{ ele.stu_pri }}</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">老师</td>
+                    <td colspan="2"><select class="form-control" id='st_se_traffic'>
+                        {% if ele.ty %}
+                            <option value="1" selected>出发航班</option>
+                            <option value="2">出发车次</option>
+                        {% else %}
+                            <option value="1">出发航班</option>
+                            <option value="2" selected>出发车次</option>
+                        {% endif %}
+                    <td colspan="2">出发时间</td>
+                    <td colspan="2">到达时间</td>
+                    {% if ele.ty %}
+                        <td colspan="3">机票单价</td>
+                    {% else %}
+                        <td colspan="3">车票单价</td>
+                    {% endif %}
+                    <td colspan="2">总计费用</td>
+                </tr>
+                <tr>
+                    {% if ele.ty %}
+                        <td colspan="2">
+                            <select class="form-control" id="st_traffic1">
+                                {% for traffic in traffics.strair %}
+                                    {% if traffic.A_id == ele.teas_air.A_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.A_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.A_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" id='st_tra_traffic'>
+                                {% for traffic in traffics.strtrain %}
+                                    {% if traffic.T_id == ele.ele.teas_tra.T_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.T_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.T_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" id="st_air_traffic">
+                                {% for traffic in traffics.strair %}
+                                    {% if traffic.A_id == ele.teas_air.A_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.A_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.A_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td colspan="2">{{ ele.teas_air.stime }}</td>
+                        <td colspan="2">{{ ele.teas_air.etime }}</td>
+                        <td colspan="3">{{ ele.teas_air.price }}</td>
+                    {% else %}
+                        <td colspan="2">
+                            <select class="form-control" id='st_traffic1'>
+                                {% for traffic in traffics.strtrain %}
+                                    {% if traffic.T_id == ele.ele.teas_tra.T_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.T_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.T_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" id='st_tra_traffic'>
+                                {% for traffic in traffics.strtrain %}
+                                    {% if traffic.T_id == ele.ele.teas_tra.T_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.T_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.T_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" id="st_air_traffic">
+                                {% for traffic in traffics.strair %}
+                                    {% if traffic.A_id == ele.teas_air.A_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.A_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.A_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td colspan="2">{{ ele.teas_tra.stime }}</td>
+                        <td colspan="2">{{ ele.teas_tra.etime }}</td>
+                        <td colspan="3">{{ ele.teas_tra.price }}</td>
+                    {% endif %}
+                    <td colspan="2">{{ ele.teacs_pri }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><select class="form-control" id='end_se_trffic'>
+                        {% if ele.ty %}
+                            <option value="1" selected>回程航班</option>
+                            <option value="2">回程车次</option>
+                        {% else %}
+                            <option value="1">回程航班</option>
+                            <option value="2" selected>回程车次</option>
+                        {% endif %}
+                    <td colspan="2">回程时间</td>
+                    <td colspan="2">结束时间</td>
+                    {% if ele.ty %}
+                        <td colspan="3">机票单价</td>
+                    {% else %}
+                        <td colspan="3">车票单价</td>
+                    {% endif %}
+                    <td colspan="2">总计费用</td>
+                </tr>
+                <tr>
+                    {% if ele.ty %}
+                        <td colspan="2">
+                            <select class="form-control" id="end_traffic">
+                                {% for traffic in traffics.endair %}
+                                    {% if traffic.A_id == ele.teae_air.A_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.A_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.A_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" id="end_tra_traffic">
+                                {% for traffic in traffics.endtrain %}
+                                    {% if traffic.T_id == ele.teae_tra.T_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.T_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.T_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" id="end_air_traffic">
+                                {% for traffic in traffics.endair %}
+                                    {% if traffic.A_id == ele.teae_air.A_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.A_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.A_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td colspan="2">{{ ele.teae_air.stime }}</td>
+                        <td colspan="2">{{ ele.teae_air.etime }}</td>
+                        <td colspan="3">{{ ele.teae_air.price }}</td>
+                    {% else %}
+                        <td colspan="2">
+                            <select class="form-control" id="end_traffic">
+                                {% for traffic in traffics.endtrain %}
+                                    {% if traffic.T_id == ele.teae_tra.T_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.T_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.T_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" id="end_tra_traffic">
+                                {% for traffic in traffics.endtrain %}
+                                    {% if traffic.T_id == ele.teae_tra.T_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.T_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.T_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-control" id="end_air_traffic">
+                                {% for traffic in traffics.endair %}
+                                    {% if traffic.A_id == ele.teae_air.A_id %}
+                                        <option value={{ traffic.pk }} selected>{{ traffic.A_id }}</option>
+                                    {% else %}
+                                        <option value= {{ traffic.pk }}>{{ traffic.A_id }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td colspan="2">{{ ele.teae_tra.stime }}</td>
+                        <td colspan="2">{{ ele.teae_tra.etime }}</td>
+                        <td colspan="3">{{ ele.teae_tra.price }}</td>
+                    {% endif %}
+                    <td colspan="2">{{ ele.teace_pri }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">补贴费</td>
+                    <td colspan="2">酒店名称</td>
+                    <td colspan="2">房间数量</td>
+                    <td colspan="3">酒店价格</td>
+                    <td colspan="2">住宿总费用</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input class="form-control" value={{ ele.allo }} style='width:110px'
+                                           id="allo_price"></td>
+                    <td colspan="2"><select class="form-control" style='width:180px'>
+                        {% for shop in grogshop %}
+                            {% if shop.pk == ele.acc.pk %}
+                                <option value={{ shop.pk }} selected>{{ shop.name }}</option>
+                            {% else %}
+                                <option value= {{ shop.pk }}>{{ shop.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td colspan="2">{{ ele.tea_acc }}</td>
+                    <td colspan="3">{{ ele.acc.price }}</td>
+                    <td colspan="2">{{ ele.tea_accpr }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">总预算</td>
+                    <td colspan="9">{{ ele.teacs_pri }} + {{ ele.teace_pri }} + {{ ele.tea_accpr }} +
+                        {{ ele.allo }} * {{ ele.teajoldays }} * {{ ele.teachernum }} = {{ ele.tea_pri }}</td>
+                </tr>
+                <tr>
+                    <td>最终总预算</td>
+                    <td colspan="11">{{ ele.stu_pri }} + {{ ele.tea_pri }} = {{ ele.price }}</td>
+                </tr>
+                <tr>
+                    <td>创建人</td>
+                    <td colspan="11" class="text-left">{{ ele.user }}</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">备注</td>
+                    <td colspan="11" rowspan="2"><input type="text" class="form-control" id="comm"></td>
+                </tr>
+                <tr></tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-10">
+            <button class="btn btn-default text-left" id="get_date">提交</button>
+        </div>
+    </div>
+    <script>
+        $('#st_tra_traffic').hide();
+        $('#st_air_traffic').hide();
+        $('#end_tra_traffic').hide();
+        $('#end_air_traffic').hide();
+        $('#st_se_traffic').change(function () {
+            $('#st_traffic1').remove();
+            $('#end_traffic').remove();
+            if ($('#st_se_traffic').val() == '1') {
+                $('#end_se_trffic').val('1');
+                $('#st_air_traffic').show();
+                $('#st_tra_traffic').hide();
+                $('#end_tra_traffic').hide();
+                $('#end_air_traffic').show();
+            } else {
+                $('#end_se_trffic').val('2');
+                $('#st_air_traffic').hide();
+                $('#st_tra_traffic').show();
+                $('#end_tra_traffic').show();
+                $('#end_air_traffic').hide();
+            }
+        })
+        $('#end_se_trffic').change(function () {
+            $('#st_traffic1').remove();
+            $('#end_traffic').remove();
+            if ($('#end_se_trffic').val() == '1') {
+                $('#st_se_traffic').val('1');
+                $('#end_se_trffic').val('1');
+                $('#st_air_traffic').show();
+                $('#st_tra_traffic').hide();
+                $('#end_tra_traffic').hide();
+                $('#end_air_traffic').show();
+            } else {
+                $('#end_se_trffic').val('2');
+                $('#st_air_traffic').hide();
+                $('#st_tra_traffic').show();
+                $('#end_tra_traffic').show();
+                $('#end_air_traffic').hide();
+            }
+        })
+    </script>
+    <script>
+        $('#get_date').click(function () {
+            var name = $('#name').text();
+            var teachernums = $('#teachernums').val();
+            var teamnums = $('#teamnums').val();
+            var felnums = $('#felnums').val();
+            var st_train = $('#st_train').val();
+            var end_train = $('#end_train').val();
+            var ty_traffic = $('#st_se_traffic').val();
+            var hotel = $('#hotel').val();
+            if (ty_traffic == '1') {
+                if ($('#st_air_traffic').is(":hidden")) {
+                    var st_teacher_traffic = $('#st_traffic1').val();
+                    var end_teacher_traffic = $('#end_traffic').val();
+                } else {
+                    var st_teacher_traffic = $('#st_air_traffic').val();
+                    var end_teacher_traffic = $('#end_air_traffic').val();
+                }
+            } else {
+                if ($('#st_tra_traffic').is(":hidden")) {
+                    var st_teacher_traffic = $('#st_traffic1').val();
+                    var end_teacher_traffic = $('#end_traffic').val();
+                } else {
+                    var st_teacher_traffic = $('#st_tra_traffic').val();
+                    var end_teacher_traffic = $('#end_tra_traffic').val();
+                }
+            }
+            var allo = $('#allo_price').val();
+            var apply = $('#apply_price').val();
+            var comm = $('#comm').val();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'ajax_cre_account' %}",
+                dataType:'json',
+                data: {
+                    name: name, teachernums: teachernums, teamnums: teamnums, felnums: felnums, st_train: st_train,
+                    end_train: end_train, ty_traffic: ty_traffic, st_teacher_traffic: st_teacher_traffic,
+                    end_teacher_traffic: end_teacher_traffic, hotel: hotel, allo: allo, apply: apply, comm:comm,
+                },
+                success: function (date) {
+                    window.location.href = date.acco_id;
+                }
+            })
+
+
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录</title>
+    <link href="/static/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/login.css" rel="stylesheet">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div style="position:absolute;top:50%;left:50%;width:300px;height:300px;margin-left:-180px;margin-top:-120px;
+        background-color: #d7d8ed; opacity:0.8">
+        <h2 class="text-center">ACM预算系统登录</h2>
+        <hr>
+            <form enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                 <div class="col-md-8 col-md-offset-2">
+                <p>
+                    {{ userform.username.label_tag }}
+                    {{ userform.username }}
+                    {{ userform.username.errors }}
+                </p>
+                <p>
+                    {{ userform.password.label_tag }}
+                    {{ userform.password }}
+                    {{ userform.password.errors }}
+                    {% if pass_error%}
+                        <ul class="errorlist" id="pass_error">
+                            <li>密码错误</li>
+                        </ul>
+                     {% endif %}
+                </p>
+                 </div>
+                <div class="col-md-3 col-md-offset-2">
+                    <button id="re_name" class="form-control" type="submit" style="width: 80px">重置</button>
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                <input class="form-control" type="submit" value="登录" style="width: 80px"/>
+                    </div>
+            </form>
+    </div>
+</div>
+<script>
+    $('#re_name').click(function () {
+        $('#id_username').val('');
+        $('#id_password').val('');
+    })
+</script>
+</body>
+</html>
