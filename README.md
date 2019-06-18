@@ -13,6 +13,9 @@ pycharm
 数据库配置和运行
 -----------
 在pycharm下运行命令：python manage.py makemigrations和python manage.py migrate 进行数据迁移（向MySQL中建表）
+
 在pycharm下运行命令：python manage.py createsuperuser 建立超级管理员（邮箱可为空）
+
 运行项目，点击运行结果中的链接，在链接后面添加/admin，登录，进入Django管理员界面，在Admi中创建第一个用户（用户类型为总教练）
+
 点击运行结果中的链接，使用之前创建的用户登录系统即可
